@@ -3,17 +3,16 @@ const app = express()
 const cors = require('cors');
 require('dotenv').config();
 const ObjectId = require('mongodb').ObjectId
-
-const admin = require("firebase-admin");
 const { MongoClient } = require('mongodb');
 const port = process.env.PORT || 5000;
+// const admin = require("firebase-admin");
 
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+// const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
 app.use(cors());
 app.use(express.json());
@@ -22,22 +21,21 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+// async function verifyToken(req, res, next) {
+//   if (req.headers?.authorization?.startsWith('Bearer ')) {
+//       const token = req.headers.authorization.split(' ')[1];
 
-async function verifyToken(req, res, next) {
-  if (req.headers?.authorization?.startsWith('Bearer ')) {
-      const token = req.headers.authorization.split(' ')[1];
+//       try {
+//           const decodedUser = await admin.auth().verifyIdToken(token);
+//           req.decodedEmail = decodedUser.email;
+//       }
+//       catch {
 
-      try {
-          const decodedUser = await admin.auth().verifyIdToken(token);
-          req.decodedEmail = decodedUser.email;
-      }
-      catch {
+//       }
 
-      }
-
-  }
-  next();
-}
+//   }
+//   next();
+// }
 
 async function run() {
   try {
@@ -48,16 +46,16 @@ async function run() {
       const reviewCollection = database.collection('review');
       const usersCollection = database.collection('users');
 
-      app.get('/cars', verifyToken, async (req, res) => {
-          const email = req.query.email;
-          const date = req.query.date;
+    //   app.get('/cars', verifyToken, async (req, res) => {
+    //       const email = req.query.email;
+    //       const date = req.query.date;
 
-          const query = { email: email, date: date }
+    //       const query = { email: email, date: date }
 
-          const cursor = carsCollection.find(query);
-          const cars = await cursor.toArray();
-          res.json(cars);
-      })
+    //       const cursor = carsCollection.find(query);
+    //       const cars = await cursor.toArray();
+    //       res.json(cars);
+    //   })
 
       app.post('/cars', async (req, res) => {
           const appointment = req.body;
